@@ -6,26 +6,27 @@ import jakarta.persistence.GenerationType;
 import org.springframework.data.annotation.Id;
 
 @Entity(name = "user_table")
-public class  UsersModel  {
+public class UserModel {
 
     @jakarta.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String login;
-    String password;
+    // TODO: 21.07.2023 add valition on fields(size, unique, null)
+    private String login;
+    private String password;
 
-    String email;
+    private String email;
 
-    public UsersModel(Long id, String login, String password, String email) {
+    public UserModel(Long id, String login, String password, String email) {
         this.id = id;
         this.login = login;
         this.password = password;
         this.email = email;
     }
 
-    public UsersModel() {
+    public UserModel() {
     }
 
     public Long getId() {
