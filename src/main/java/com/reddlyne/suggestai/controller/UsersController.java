@@ -1,9 +1,13 @@
 package com.reddlyne.suggestai.controller;
+import com.reddlyne.suggestai.controller.request.UserLoginRequest;
 import com.reddlyne.suggestai.controller.request.UserRegisterRequest;
+import com.reddlyne.suggestai.controller.response.UserLoginResponse;
 import com.reddlyne.suggestai.controller.response.UserRegisterResponse;
 import com.reddlyne.suggestai.exception.RegistirationNotCompleted;
 import com.reddlyne.suggestai.model.UserModel;
 import com.reddlyne.suggestai.service.UserService;
+import com.reddlyne.suggestai.service.exception.AuthenticationFailure;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,13 +41,24 @@ public class UsersController {
 
 
     @PostMapping("/login")
-    public String login(){
+    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
+        try {
+            UserModel userModel = userService.authenticate(userLoginRequest.getUsername(), userLoginRequest.getPassword());
 
+            if (userModel == null) {
+                throw new AuthenticationFailure("Something went wrong when creating user.");
+            }
 
-        //TODO: 21.07.2023 token oluşturma yapılacak.
-        UserRegisterResponse userResponse = new UserRegisterResponse();
-        //userResponse.setToken("asd123");
-        return null;
+            UserLoginResponse userResponse = new UserLoginResponse();
+            // fill jwt
+            // userResponse.setJwt();
+
+            return ResponseEntity.ok(userResponse);
+        } catch (AuthenticationFailure e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new UserLoginResponse());
+        }
     }
 
 }
