@@ -1,4 +1,6 @@
 package com.reddlyne.suggestai.controller;
+
+import com.reddlyne.suggestai.configuration.TokenManager;
 import com.reddlyne.suggestai.controller.request.UserLoginRequest;
 import com.reddlyne.suggestai.controller.request.UserRegisterRequest;
 import com.reddlyne.suggestai.controller.response.UserLoginResponse;
@@ -14,15 +16,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class UsersController {
     private final UserService userService;
-    public UsersController(UserService userService) {
+
+    private final TokenManager tokenManager;
+
+    public UsersController(UserService userService, TokenManager tokenManager) {
         this.userService = userService;
+        this.tokenManager = tokenManager;
     }
+
     @PostMapping("/register")
-    public ResponseEntity<UserRegisterResponse> register(@RequestBody UserRegisterRequest userRegisterRequest){
+    public ResponseEntity<UserRegisterResponse> register(@RequestBody UserRegisterRequest userRegisterRequest) {
 
         System.out.println("received: " + userRegisterRequest.toString());
         UserModel userModel = userService.registerUser(userRegisterRequest.getUsername(), userRegisterRequest.getPassword(), userRegisterRequest.getMail());
@@ -39,26 +47,22 @@ public class UsersController {
         return ResponseEntity.ok(userResponse);
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
+
+        System.out.println("received: " + userLoginRequest.toString());
         try {
             UserModel userModel = userService.authenticate(userLoginRequest.getUsername(), userLoginRequest.getPassword());
 
-            if (userModel == null) {
-                throw new AuthenticationFailure("Something went wrong when creating user.");
-            }
-
             UserLoginResponse userResponse = new UserLoginResponse();
-            // fill jwt
-            // userResponse.setJwt();
-
+            String jwt = tokenManager.generateToken(userModel.getLogin());
+            userResponse.setJwt(jwt);
             return ResponseEntity.ok(userResponse);
+
         } catch (AuthenticationFailure e) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(new UserLoginResponse());
+                    .build();
         }
     }
-
 }
