@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-public class UsersController {
+public class UserController {
     private final UserService userService;
 
     private final TokenManager tokenManager;
 
-    public UsersController(UserService userService, TokenManager tokenManager) {
+    public UserController(UserService userService, TokenManager tokenManager) {
         this.userService = userService;
         this.tokenManager = tokenManager;
     }
