@@ -1,3 +1,4 @@
+/*
 package com.reddlyne.suggestai.configuration;
 
 import java.io.IOException;
@@ -20,4 +21,4 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.sendError(javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
     }
-}
+}*/

@@ -1,7 +1,6 @@
+/*
 package com.reddlyne.suggestai.configuration;
 
-import com.reddlyne.suggestai.configuration.TokenManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -18,8 +17,12 @@ import java.util.ArrayList;
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private TokenManager tokenManager;
+    private final TokenManager tokenManager;
+
+    public JwtTokenFilter(TokenManager tokenManager) {
+        this.tokenManager = tokenManager;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest,
                                     HttpServletResponse httpServletResponse,
@@ -52,3 +55,4 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     }
 }
+*/

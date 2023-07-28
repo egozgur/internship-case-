@@ -1,6 +1,5 @@
 package com.reddlyne.suggestai.controller;
 
-import com.reddlyne.suggestai.configuration.TokenManager;
 import com.reddlyne.suggestai.controller.request.UserLoginRequest;
 import com.reddlyne.suggestai.controller.request.UserRegisterRequest;
 import com.reddlyne.suggestai.controller.response.UserLoginResponse;
@@ -22,11 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    private final TokenManager tokenManager;
-
-    public UserController(UserService userService, TokenManager tokenManager) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.tokenManager = tokenManager;
     }
 
     @PostMapping("/register")
@@ -49,20 +45,15 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
-
-        System.out.println("received: " + userLoginRequest.toString());
+        UserModel userModel;
         try {
-            UserModel userModel = userService.authenticate(userLoginRequest.getUsername(), userLoginRequest.getPassword());
-
-            UserLoginResponse userResponse = new UserLoginResponse();
-            String jwt = tokenManager.generateToken(userModel.getLogin());
-            userResponse.setJwt(jwt);
-            return ResponseEntity.ok(userResponse);
-
+            userModel = userService.authenticate(userLoginRequest.getUsername(), userLoginRequest.getPassword());
         } catch (AuthenticationFailure e) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        UserLoginResponse userResponse = new UserLoginResponse();
+        userResponse.setUserId(userModel.getId());
+        return ResponseEntity.ok(userResponse);
+
     }
 }

@@ -1,3 +1,4 @@
+/*
 package com.reddlyne.suggestai.configuration;
 
 import io.jsonwebtoken.Claims;
@@ -20,7 +21,7 @@ public class TokenManager {
     private String secretKey;
 
     public String generateToken(String username) {
-        return Jwts.builder()
+         return Jwts.builder()
                 .setSubject(username)
                 .setIssuer("egemen")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -49,4 +50,10 @@ public class TokenManager {
     private Claims getClaims(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
-}
+
+    public Long getUserIdFromJwt(String token) {
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return Long.parseLong(claims.getSubject());
+    }
+
+}*/

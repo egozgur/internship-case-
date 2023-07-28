@@ -2,27 +2,27 @@ package com.reddlyne.suggestai.controller.response;
 
 public class UserLoginResponse {
 
-    private String jwt;
+    private long userId;
 
     public UserLoginResponse() {
     }
 
-    public UserLoginResponse(String jwt) {
-        this.jwt = jwt;
+    public UserLoginResponse(long userId) {
+        this.userId = userId;
     }
 
-    public String getJwt() {
-        return jwt;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setJwt(String jwt) {
-        this.jwt = jwt;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     @Override
     public String toString() {
         return "UserLoginResponse{" +
-                "jwt='" + jwt + '\'' +
+                "jwt='" + userId + '\'' +
                 '}';
     }
 }
