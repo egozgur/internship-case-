@@ -1,5 +1,6 @@
 package com.reddlyne.suggestai.aop;
 
+import com.reddlyne.suggestai.exception.UnexpectedAIFailure;
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,12 @@ public class ExceptionHandlerAdvice {
     protected ResponseEntity<Object> handleConstraintViolationException(
             ConstraintViolationException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler ({UnexpectedAIFailure.class})
+    protected ResponseEntity<Object> handleUnexpectedAIFailureException(
+            UnexpectedAIFailure e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     /*@ExceptionHandler(ConstraintViolationException.class)
