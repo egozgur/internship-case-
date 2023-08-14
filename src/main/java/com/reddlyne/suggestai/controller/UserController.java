@@ -8,16 +8,19 @@ import com.reddlyne.suggestai.exception.RegistirationNotCompleted;
 import com.reddlyne.suggestai.model.UserModel;
 import com.reddlyne.suggestai.service.UserService;
 import com.reddlyne.suggestai.service.exception.AuthenticationFailure;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import javax.validation.Valid;
 
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Validated
 public class UserController {
     private final UserService userService;
 
@@ -26,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserRegisterResponse> register(@RequestBody UserRegisterRequest userRegisterRequest) {
+    public ResponseEntity<UserRegisterResponse> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
 
         System.out.println("received: " + userRegisterRequest.toString());
         UserModel userModel = userService.registerUser(userRegisterRequest.getUsername(), userRegisterRequest.getPassword(), userRegisterRequest.getMail());
@@ -44,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
+    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest userLoginRequest) {
         UserModel userModel;
         try {
             userModel = userService.authenticate(userLoginRequest.getUsername(), userLoginRequest.getPassword());

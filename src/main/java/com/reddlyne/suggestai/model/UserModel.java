@@ -1,11 +1,7 @@
 package com.reddlyne.suggestai.model;
 
-
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 
 @Entity(name = "user_table")
@@ -15,9 +11,10 @@ public class UserModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: 21.07.2023 add valition on fields(size, unique, null)
     @Column(unique = true, nullable = false)
     @Size(min = 3, max = 50)
+    @NotNull
+    @NotEmpty(message = "Please provide a username")
     private String login;
 
     @NotNull

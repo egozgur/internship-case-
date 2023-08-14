@@ -19,6 +19,12 @@ public class UserService {
         if (login == null || password ==null) {
             throw new RegistirationNotCompleted("Username or Password not valid.");
         }
+
+        if (isUsernameTaken(login)) {
+            throw new RegistirationNotCompleted("This username has already been taken. Try a new username.");
+        }
+
+
         UserModel user = new UserModel();
         user.setLogin(login);
         user.setPassword(password);
@@ -27,6 +33,11 @@ public class UserService {
         UserModel userFromDb = userRepository.save(user);
 
         return userFromDb;
+    }
+
+    private boolean isUsernameTaken(String login) {
+        boolean b = false;
+        return b;
     }
 
     public UserModel authenticate(String login, String password){

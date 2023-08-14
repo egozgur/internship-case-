@@ -18,4 +18,7 @@ public class SuggestRequest {
     public void setText(String text) {
         this.text = text;
     }
+
+    public String getMessage() { return text; }
+
 }
