@@ -1,6 +1,7 @@
 package com.reddlyne.suggestai.configuration;
 
 
+import com.reddlyne.suggestai.configuration.jwt.JwtTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,16 +11,22 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity(debug = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    public WebSecurityConfiguration(JwtTokenFilter jwtTokenFilter) {
+        this.jwtTokenFilter = jwtTokenFilter;
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
     }
+    private final JwtTokenFilter jwtTokenFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,6 +51,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                             );
                         }
                 );
+
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
     }
 
     @Override
