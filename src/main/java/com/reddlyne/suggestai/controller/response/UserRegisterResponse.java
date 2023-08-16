@@ -2,42 +2,31 @@ package com.reddlyne.suggestai.controller.response;
 
 public class UserRegisterResponse {
 
-    private Long id;
+    private String login;
 
-    private String username;
-
-    private String mail;
+    private eRegistrationStatus registrationStatus;
 
     public UserRegisterResponse() {
     }
 
-    public UserRegisterResponse(Long id, String username, String mail) {
-        this.id = id;
-        this.username = username;
-        this.mail = mail;
+    public UserRegisterResponse(String _login, eRegistrationStatus _registrationStatus) {
+        this.login = _login;
+        this.registrationStatus = _registrationStatus;
     }
 
-    public Long getId() {
-        return id;
+    public String getLogin() {
+        return login;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public String getUsername() {
-        return username;
+    public eRegistrationStatus getRegistrationStatus() {
+        return registrationStatus;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setRegistrationStatus(eRegistrationStatus registrationStatus) {
+        this.registrationStatus = registrationStatus;
     }
 }

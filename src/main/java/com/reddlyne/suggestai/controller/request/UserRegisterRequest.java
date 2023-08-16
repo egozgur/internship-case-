@@ -6,15 +6,9 @@ public class UserRegisterRequest {
 
     private String password;
 
-    private String mail;
+    private String email;
 
     public UserRegisterRequest() {
-    }
-
-    public UserRegisterRequest(String username, String password, String mail) {
-        this.username = username;
-        this.password = password;
-        this.mail = mail;
     }
 
     public String getUsername() {
@@ -33,12 +27,13 @@ public class UserRegisterRequest {
         this.password = password;
     }
 
-    public String getMail() {
-        return mail;
+
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -46,7 +41,6 @@ public class UserRegisterRequest {
         return "UserRegisterRequest{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", mail='" + mail + '\'' +
                 '}';
     }
 

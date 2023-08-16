@@ -13,11 +13,12 @@ import org.springframework.web.client.RestTemplate;
 public class SuggestService {
 
     private final RestTemplate restTemplate;
-    private final String flaskUrl;
 
-    public SuggestService(RestTemplate restTemplate, @Value("${suggest.server.url}") String flaskUrl) {
+    @Value("${suggest.server.url}")
+    private String flaskUrl;
+
+    public SuggestService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.flaskUrl = flaskUrl;
     }
 
     public SuggestResponse getSuggestedResponse(String receivedMessage) {

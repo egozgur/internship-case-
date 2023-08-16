@@ -1,49 +1,60 @@
 package com.reddlyne.suggestai.service;
 
+import com.reddlyne.suggestai.configuration.jwt.JwtTokenUtil;
+import com.reddlyne.suggestai.controller.response.UserLoginResponse;
+import com.reddlyne.suggestai.exception.AuthenticationFailure;
 import com.reddlyne.suggestai.exception.RegistirationNotCompleted;
-import com.reddlyne.suggestai.model.UserModel;
+import com.reddlyne.suggestai.model.User;
 import com.reddlyne.suggestai.repository.UserRepository;
-import com.reddlyne.suggestai.service.exception.AuthenticationFailure;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
 
+    private final AuthenticationManager authManager;
 
-    public UserService(UserRepository userRepository){
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    private final JwtTokenUtil jwtUtil;
+
+    public UserService(UserRepository userRepository, AuthenticationManager authManager, BCryptPasswordEncoder passwordEncoder, JwtTokenUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.authManager = authManager;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
-    public UserModel registerUser(String login, String password, String mail){
-        if (login == null || password ==null) {
+
+    public User registerUser(String login, String password, String email) {
+        if (login == null || password == null) {
             throw new RegistirationNotCompleted("Username or Password not valid.");
         }
 
-        if (isUsernameTaken(login)) {
-            throw new RegistirationNotCompleted("This username has already been taken. Try a new username.");
-        }
+        String encryptedPassword = passwordEncoder.encode(password);
 
-
-        UserModel user = new UserModel();
+        User user = new User();
         user.setLogin(login);
-        user.setPassword(password);
-        user.setEmail(mail);
+        user.setPassword(encryptedPassword);
+        user.setEmail(email);
 
-        UserModel userFromDb = userRepository.save(user);
-
+        User userFromDb = userRepository.save(user);
         return userFromDb;
     }
 
-    private boolean isUsernameTaken(String login) {
-        boolean b = false;
-        return b;
-    }
+    public UserLoginResponse login(String login, String password) {
+        User user = userRepository.findByLogin(login);
 
-    public UserModel authenticate(String login, String password){
-        UserModel userModel = userRepository
-                .findByLoginAndPassword(login, password)
-                .orElseThrow(() -> new AuthenticationFailure("Username or password not found."));
-        return userModel;
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            String accessToken = jwtUtil.generateAccessToken(user);
+            return new UserLoginResponse(user.getLogin(), accessToken);
+        } else {
+            throw new RegistirationNotCompleted("Username or Password not valid.");
+        }
     }
 }
