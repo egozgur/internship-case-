@@ -18,8 +18,6 @@ public class User implements UserDetails {
 	@Column(nullable = false, length = 64)
 	private String password;
 
-	public String aaaa;
-
 	@Column(nullable = false, length = 50, unique = true)
 	private String login;
 

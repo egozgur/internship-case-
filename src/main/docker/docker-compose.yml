@@ -1,7 +1,7 @@
 version: '3.8'
 services:
-  suggest-db:
-    container_name: suggest-db
+  suggestdb:
+    container_name: suggestdb
     image: postgres:14.1-alpine
     restart: always
     environment:
@@ -12,9 +12,9 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
 
-  suggest-ai:
+  suggestai:
     image: suggestai:v0.1
 #    restart: always
-    container_name: suggest-ai
-#    ports:
-#      - '8080:8080'
+    container_name: suggestai
+    ports:
+      - '8080:8080'

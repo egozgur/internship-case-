@@ -21,7 +21,7 @@ public class SuggestService {
         this.restTemplate = restTemplate;
     }
 
-    public SuggestResponse getSuggestedResponse(String receivedMessage) {
+    public SuggestResponse askToGPT(String receivedMessage) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
