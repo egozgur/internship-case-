@@ -18,3 +18,11 @@ services:
     container_name: suggestai
     ports:
       - '8080:8080'
+
+  flaskapp:
+    container_name: flaskapp
+    build:
+      context: /Users/egemenozgur/Desktop/egm/internship/suggestai-python-v2
+
+    ports:
+      - '5001:5001'
