@@ -20,32 +20,27 @@ public class JwtTokenUtil {
 	private String SECRET_KEY;
 	
 	public String generateAccessToken(User user) {
+		Date now = new Date();
+		Date expirationDate = new Date(now.getTime() + EXPIRE_DURATION);
+
 		return Jwts.builder()
 				.setSubject(String.format("%s,%s", user.getId(), user.getLogin()))
-				.setIssuer("suggestai")
-				.setIssuedAt(new Date())
-				.setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
-				.signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+				.setIssuedAt(now)
+				.setExpiration(expirationDate)
+				.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
 				.compact();
 	}
 	
 	public boolean validateAccessToken(String token) {
 		try {
-			Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+			Jwts.parser()
+					.setSigningKey(SECRET_KEY)
+					.parseClaimsJws(token);
+
 			return true;
-		} catch (ExpiredJwtException ex) {
-			LOGGER.error("JWT expired", ex.getMessage());
-		} catch (IllegalArgumentException ex) {
-			LOGGER.error("Token is null, empty or only whitespace", ex.getMessage());
-		} catch (MalformedJwtException ex) {
-			LOGGER.error("JWT is invalid", ex);
-		} catch (UnsupportedJwtException ex) {
-			LOGGER.error("JWT is not supported", ex);
-		} catch (SignatureException ex) {
-			LOGGER.error("Signature validation failed");
+		} catch (Exception e) {
+			return false;
 		}
-		
-		return false;
 	}
 	
 	public String getSubject(String token) {

@@ -1,5 +1,7 @@
 package com.reddlyne.suggestai.aop;
 
+import com.reddlyne.suggestai.controller.response.UserLoginResponse;
+import com.reddlyne.suggestai.exception.RegistirationNotCompleted;
 import com.reddlyne.suggestai.exception.UnexpectedAIFailure;
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
@@ -39,33 +41,10 @@ public class ExceptionHandlerAdvice {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
-    /*@ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ExceptionResult> handleConstraintViolationExceptions(ConstraintViolationException e, WebRequest request) {
-        ExceptionResult exceptionResult = new ExceptionResult();
-        exceptionResult.setDescription("Constraint violation.");
-        exceptionResult.setMessage(e.getMessage());
-        exceptionResult.setStatus(HttpStatus.UNPROCESSABLE_ENTITY);
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exceptionResult);
-    }*/
-
-    /*@ExceptionHandler(value = RegistirationNotCompleted.class)
-    @ExceptionHandler(value = UserNotFoundException.class)
-    @ExceptionHandler(value = AuthenticationFailure.class)
-    @ExceptionHandler(value = UserAlreadyExistsException.class)
-    @ExceptionHandler(value = UserNotCreatedException.class)
-    @ExceptionHandler(value = UserNotUpdatedException.class)
-    @ExceptionHandler(value = UserNotDeletedException.class)
-
-
-
-
-
-   /*@ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<ExceptionResult> handleExceptions(Exception e) {
-        ExceptionResult exceptionResult = new ExceptionResult();
-        exceptionResult.setDescription("Something went wrong.");
-        exceptionResult.setMessage(e.getMessage());
-        exceptionResult.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResult);
-    }*/
+    @ExceptionHandler(RegistirationNotCompleted.class)
+    public ResponseEntity<UserLoginResponse> handleRegistrationNotCompleted(RegistirationNotCompleted ex) {
+        String errorMessage = "Wrong Username or Password ";
+        UserLoginResponse errorResponse = new UserLoginResponse(false, errorMessage);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
 }

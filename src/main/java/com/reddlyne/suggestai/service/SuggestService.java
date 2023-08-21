@@ -14,8 +14,12 @@ public class SuggestService {
 
     private final RestTemplate restTemplate;
 
-    @Value("${suggest.server.url}")
-    private String flaskUrl;
+    @Value("${suggest.server.host}")
+    private String flaskHost;
+
+    @Value("${suggest.server.port}")
+    private String flaskPort;
+
 
     public SuggestService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -29,14 +33,14 @@ public class SuggestService {
 
         HttpEntity<SuggestRequest> requestEntity = new HttpEntity<>(flaskRequest, headers);
 
-        ResponseEntity<SuggestResponse> responseEntity = null;
+        ResponseEntity<SuggestResponse> responseEntity;
         try {
-            responseEntity = restTemplate.exchange(flaskUrl, HttpMethod.POST, requestEntity, SuggestResponse.class);
+            String url = flaskHost + ":" + flaskPort + "/";
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, SuggestResponse.class);
         } catch (HttpServerErrorException e) {
             throw new UnexpectedAIFailure("Something went wrong on AI engine side.", e);
         }
 
-        SuggestResponse response = responseEntity.getBody();
-        return new SuggestResponse(response.getResponseText());
+        return new SuggestResponse(responseEntity.getBody().getResponseText());
     }
 }

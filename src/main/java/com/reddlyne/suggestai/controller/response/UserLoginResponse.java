@@ -19,7 +19,7 @@ public class UserLoginResponse {
         this.jwt = jwt;
     }
 
-    public UserLoginResponse(String login) {
+    public UserLoginResponse(boolean b, String login) {
         this.login = login;
     }
 
