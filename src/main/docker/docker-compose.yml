@@ -15,7 +15,7 @@ services:
       - suggest-network
 
   suggestai:
-    image: suggestai:v0.1
+    image: egemenozgur/suggestai:latest
     container_name: suggestai
     ports:
       - '8080:8080'
@@ -23,7 +23,7 @@ services:
       - suggest-network
 
   suggestai-engine:
-    image: suggestai-engine:v0.1
+    image: egemenozgur/suggestai-engine:latest
     container_name: suggestai-engine
     networks:
       - suggest-network
