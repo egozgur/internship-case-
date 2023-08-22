@@ -11,16 +11,24 @@ services:
       - '5432:5432'
     volumes:
       - ./db:/var/lib/postgresql/data
+    networks:
+      - suggest-network
 
   suggestai:
     image: suggestai:v0.1
-#    restart: always
     container_name: suggestai
     ports:
       - '8080:8080'
+    networks:
+      - suggest-network
 
   suggestai-engine:
     image: suggestai-engine:v0.1
     container_name: suggestai-engine
-    ports:
-      - '5001:5001'
+    networks:
+      - suggest-network
+
+
+networks:
+  suggest-network:
+    driver: bridge

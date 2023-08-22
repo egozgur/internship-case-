@@ -14,11 +14,11 @@ public class SuggestService {
 
     private final RestTemplate restTemplate;
 
-    @Value("${suggest.server.host}")
-    private String flaskHost;
+    @Value("${suggestai-engine.host}") // Changed to "suggestai-engine"
+    private String suggestEngineHost;
 
-    @Value("${suggest.server.port}")
-    private String flaskPort;
+    @Value("${suggestai-engine.port}") // Changed to "suggestai-engine"
+    private String suggestEnginePort;
 
 
     public SuggestService(RestTemplate restTemplate) {
@@ -35,7 +35,7 @@ public class SuggestService {
 
         ResponseEntity<SuggestResponse> responseEntity;
         try {
-            String url = flaskHost + ":" + flaskPort + "/";
+            String url = "http://" + suggestEngineHost + ":" + suggestEnginePort + "/";
             responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, SuggestResponse.class);
         } catch (HttpServerErrorException e) {
             throw new UnexpectedAIFailure("Something went wrong on AI engine side.", e);
