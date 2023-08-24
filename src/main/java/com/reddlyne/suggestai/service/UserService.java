@@ -5,7 +5,6 @@ import com.reddlyne.suggestai.controller.response.UserLoginResponse;
 import com.reddlyne.suggestai.exception.RegistirationNotCompleted;
 import com.reddlyne.suggestai.model.User;
 import com.reddlyne.suggestai.repository.UserRepository;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

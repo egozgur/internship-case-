@@ -12,7 +12,7 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"] # postgres name environment
       interval: 2s
       timeout: 3s
       retries: 10
@@ -20,7 +20,7 @@ services:
       - suggest-network
 
   suggestai:
-    image: egemenozgur/suggestai:latest
+    image: egemenozgur/suggestai:v0.1
     container_name: suggestai
     ports:
       - '8080:8080'
@@ -31,7 +31,7 @@ services:
       - suggest-network
 
   suggestai-engine:
-    image: egemenozgur/suggestai-engine:latest
+    image: egemenozgur/suggestai-engine:v0.1
     container_name: suggestai-engine
     networks:
       - suggest-network
