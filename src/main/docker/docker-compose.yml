@@ -12,7 +12,7 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"] # postgres name environment
+      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"] # postgres name environment variable is used here
       interval: 2s
       timeout: 3s
       retries: 10
