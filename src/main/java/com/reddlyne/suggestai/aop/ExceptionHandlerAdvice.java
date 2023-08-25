@@ -7,15 +7,11 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
-import java.util.Set;
+import java.sql.SQLException;
 
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
@@ -29,11 +25,22 @@ public class ExceptionHandlerAdvice {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exceptionResult);
     }
 
-    @ExceptionHandler ({ConstraintViolationException.class})
-    protected ResponseEntity<Object> handleConstraintViolationException(
-            ConstraintViolationException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e) {
+        String errorMessage = "Invalid input. Please check your data.";
+
+        Throwable cause = e.getCause();
+        if (cause instanceof SQLException) {
+            String sqlState = ((SQLException) cause).getSQLState();
+            if ("23505".equals(sqlState)) { // PostgreSQL unique violation code
+                errorMessage = "Username or email is already in use. Please choose a different one.";
+            }
+        }
+
+        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler ({UnexpectedAIFailure.class})
     protected ResponseEntity<Object> handleUnexpectedAIFailureException(
