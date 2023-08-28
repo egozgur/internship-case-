@@ -8,7 +8,7 @@ public class UserRegisterRequest {
 
     private String email;
 
-    public UserRegisterRequest() {
+    public UserRegisterRequest(String username, String password, String email) {
     }
 
     public String getUsername() {

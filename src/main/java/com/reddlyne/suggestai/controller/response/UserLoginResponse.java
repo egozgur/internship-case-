@@ -5,6 +5,8 @@ public class UserLoginResponse {
     private String login;
 
     private String jwt;
+    private String message; // Eklenen alan
+
 
     public UserLoginResponse(String login, String jwt) {
         this.login = login;

@@ -27,7 +27,7 @@ public class ExceptionHandlerAdvice {
 
 
     @ExceptionHandler(ConstraintViolationException.class)
-    protected ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e) {
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e) {
         String errorMessage = "Invalid input. Please check your data.";
 
         Throwable cause = e.getCause();
@@ -43,7 +43,7 @@ public class ExceptionHandlerAdvice {
 
 
     @ExceptionHandler ({UnexpectedAIFailure.class})
-    protected ResponseEntity<Object> handleUnexpectedAIFailureException(
+    public ResponseEntity<Object> handleUnexpectedAIFailureException(
             UnexpectedAIFailure e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
     }
