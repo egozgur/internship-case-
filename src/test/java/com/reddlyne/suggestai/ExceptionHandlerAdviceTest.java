@@ -31,14 +31,11 @@ public class ExceptionHandlerAdviceTest {
 
     @Test
     void testHandleDatabaseExceptions() {
-        // Arrange
         PSQLException mockException = mock(PSQLException.class);
         when(mockException.getMessage()).thenReturn("Database error.");
 
-        // Act
         ResponseEntity<ExceptionResult> response = exceptionHandlerAdvice.handleDatabaseExceptions(mockRequest, mockException);
 
-        // Assert
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
         ExceptionResult responseBody = response.getBody();
         assertEquals("Database error.", responseBody.getDescription());
@@ -47,29 +44,23 @@ public class ExceptionHandlerAdviceTest {
 
     @Test
     void testHandleConstraintViolationException() {
-        // Arrange
         ConstraintViolationException mockException = mock(ConstraintViolationException.class);
         SQLException mockCause = mock(SQLException.class);
         when(mockCause.getSQLState()).thenReturn("23505");
         when(mockException.getCause()).thenReturn(mockCause);
 
-        // Act
         ResponseEntity<Object> response = exceptionHandlerAdvice.handleConstraintViolationException(mockException);
 
-        // Assert
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Username or email is already in use. Please choose a different one.", response.getBody());
     }
 
     @Test
     void testHandleUnexpectedAIFailureException() {
-        // Arrange
         UnexpectedAIFailure mockException = mock(UnexpectedAIFailure.class);
 
-        // Act
         ResponseEntity<Object> response = exceptionHandlerAdvice.handleUnexpectedAIFailureException(mockException);
 
-        // Assert
         assertEquals(HttpStatus.SERVICE_UNAVAILABLE, response.getStatusCode());
         assertEquals(mockException.getMessage(), response.getBody());
     }

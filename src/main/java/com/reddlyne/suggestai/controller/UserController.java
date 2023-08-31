@@ -12,15 +12,13 @@ import com.reddlyne.suggestai.service.UserService;
 import com.reddlyne.suggestai.service.exception.AuthenticationFailure;
 import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
 
 
+@CrossOrigin(origins = "http://localhost:3000") // React URL
 @RestController
 @RequestMapping("/api/v1/auth")
 @Validated

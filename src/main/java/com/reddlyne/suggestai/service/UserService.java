@@ -5,8 +5,10 @@ import com.reddlyne.suggestai.controller.response.UserLoginResponse;
 import com.reddlyne.suggestai.exception.RegistirationNotCompleted;
 import com.reddlyne.suggestai.model.User;
 import com.reddlyne.suggestai.repository.UserRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 
 @Service
@@ -43,11 +45,12 @@ public class UserService {
     public UserLoginResponse login(String login, String password) {
         User user = userRepository.findByLogin(login);
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            String accessToken = jwtUtil.generateAccessToken(user);
-            return new UserLoginResponse(user.getLogin(), accessToken);
-        } else {
-            throw new RegistirationNotCompleted("Username or Password not valid.");
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+            throw new UsernameNotFoundException("Wrong username or password.");
         }
+
+        String accessToken = jwtUtil.generateAccessToken(user);
+        return new UserLoginResponse(user.getLogin(), accessToken);
     }
+
 }
