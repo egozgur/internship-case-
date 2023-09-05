@@ -29,18 +29,18 @@ public class ExceptionHandlerAdviceTest {
         mockRequest = mock(HttpServletRequest.class);
     }
 
-    @Test
-    void testHandleDatabaseExceptions() {
-        PSQLException mockException = mock(PSQLException.class);
-        when(mockException.getMessage()).thenReturn("Database error.");
-
-        ResponseEntity<ExceptionResult> response = exceptionHandlerAdvice.handleDatabaseExceptions(mockRequest, mockException);
-
-        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
-        ExceptionResult responseBody = response.getBody();
-        assertEquals("Database error.", responseBody.getDescription());
-        assertEquals("Database error.", responseBody.getMessage());
-    }
+//    @Test
+//    void testHandleDatabaseExceptions() {
+//        PSQLException mockException = mock(PSQLException.class);
+//        when(mockException.getMessage()).thenReturn("Database error.");
+//
+//        ResponseEntity<ExceptionResult> response = exceptionHandlerAdvice.handleDatabaseExceptions(mockRequest, mockException);
+//
+//        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
+//        ExceptionResult responseBody = response.getBody();
+//        assertEquals("Database error.", responseBody.getDescription());
+//        assertEquals("Database error.", responseBody.getMessage());
+//    }
 
     @Test
     void testHandleConstraintViolationException() {

@@ -12,21 +12,24 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 @EnableWebSecurity(debug = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private final JwtTokenFilter jwtTokenFilter;
 
     public WebSecurityConfiguration(JwtTokenFilter jwtTokenFilter) {
         this.jwtTokenFilter = jwtTokenFilter;
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-    }
-    private final JwtTokenFilter jwtTokenFilter;
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {}
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -39,8 +42,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/api/v1/auth/**").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/api/v1/auth/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated();
 
         http.exceptionHandling()
                 .authenticationEntryPoint(
@@ -55,7 +60,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
-
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {

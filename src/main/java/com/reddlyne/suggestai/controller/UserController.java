@@ -10,7 +10,8 @@ import com.reddlyne.suggestai.exception.RegistirationNotCompleted;
 import com.reddlyne.suggestai.model.User;
 import com.reddlyne.suggestai.service.UserService;
 import com.reddlyne.suggestai.service.exception.AuthenticationFailure;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
