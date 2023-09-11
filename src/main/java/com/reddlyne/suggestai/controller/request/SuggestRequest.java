@@ -1,7 +1,11 @@
 package com.reddlyne.suggestai.controller.request;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SuggestRequest {
 
+    @JsonAlias({"message", "text"})
     private String text;
 
     public SuggestRequest() {

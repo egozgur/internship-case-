@@ -36,6 +36,13 @@ services:
     networks:
       - suggest-network
 
+  suggest-ui:
+    image: egemenozgur/suggest-ui:v0.1
+    container_name: suggest-ui
+    ports:
+      - '3000:3000'
+    networks:
+      - suggest-network
 
 networks:
   suggest-network:
