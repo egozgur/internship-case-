@@ -12,24 +12,22 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 
 @EnableWebSecurity(debug = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenFilter jwtTokenFilter;
 
+
     public WebSecurityConfiguration(JwtTokenFilter jwtTokenFilter) {
         this.jwtTokenFilter = jwtTokenFilter;
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {}
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,10 +36,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        http.authorizeRequests()
+        http
+                .csrf()
+                .disable()
+                .authorizeRequests()
                 .antMatchers("/api/v1/auth/**")
                 .permitAll()
                 .anyRequest()
@@ -58,8 +56,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 );
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
+        http.cors();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
+
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {

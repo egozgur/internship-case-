@@ -1,4 +1,4 @@
-package com.reddlyne.suggestai.configuration;
+package com.reddlyne.suggestai.configuration.bean;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
